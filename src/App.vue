@@ -3,26 +3,54 @@
 export default {
   data() {
     return {
-      titleData: ''
+      titleData: '',
+      contentData: '',
+      markData: '',
+      days: [
+        { id: 1, day: "星期一" },
+        { id: 2, day: "星期二" },
+        { id: 3, day: "星期三" },
+        { id: 4, day: "星期四" },
+        { id: 5, day: "星期五" },
+        { id: 6, day: "星期六" },
+        { id: 7, day: "星期日" },
+      ],
+      onWeeks: [
+        { id: 1, week: "第一周" },
+        { id: 2, week: "第二周" },
+        { id: 3, week: "第三周" },
+        { id: 4, week: "第四周" },
+        { id: 5, week: "第五周" },
+        { id: 6, week: "第六周" },
+      ]
     };
   },
   mounted() {
     // 接着写JS……
-  //   var timeBlock = { title: "数据裤应用", data: "2023年1月6日", mark: "好简单啊" };
-  //   document.getElementById('timeBlockTitle').innerHTML = timeBlock.title;
-  //   document.getElementById('timeBlockData').innerHTML = timeBlock.data;
-  //   document.getElementById('timeBlockMark').innerHTML = timeBlock.mark;
-  this.titleData = localStorage.getItem('Title');
-  console.log("读取本地数据：",localStorage.getItem('Title'))
+    this.titleData = localStorage.getItem('Title');
+    this.contentData = localStorage.getItem('Data');
+    this.markData = localStorage.getItem('Mark');
   },
   methods: {
     // 接着写JS……
-    innerChange: function() {
+    innerChange: function () {
       localStorage.setItem('Title', this.titleData);
-      console.log("成功保存本地数据：",localStorage.getItem('Title'))
-      // localStorage.setItem('Data', document.getElementById('timeBlockData').innerHTML);
-      // localStorage.setItem('Mark', document.getElementById('timeBlockMark').innerHTML);
-      // document.getElementById('testP').innerHTML = "1";
+      localStorage.setItem('Data', this.contentData);
+      localStorage.setItem('Mark', this.markData);
+    },
+    uploadFile: function () {
+      document.getElementById("uploadFile").click();
+    },
+    uploadInput: function () {
+      console.log(document.getElementById("uploadFile").value)
+    },
+    tirggerFile: function (event) {
+      // 利用console.log输出看结构就知道如何处理档案资料
+      var file = event.target.files[0];
+      // console.log(file);
+      fetch(file.path)
+        .then((response) => response.json())
+        .then((json) => console.log(json));
     }
   }
 }
@@ -30,55 +58,25 @@ export default {
 
 <!--下面写HTML-->
 <template>
-  <div>
-    <div id="timeBlock">
-      <textarea id="timeBlockTitle" v-model="titleData"></textarea>
-      <textarea id="timeBlockData" ></textarea>
-      <textarea id="timeBlockMark" ></textarea>
-      <button v-on:click="innerChange()">Change</button>
-      <!-- <p id="testP"></p> -->
-    </div>
-  </div>
+  <el-button id="uploadButton" v-on:click="uploadFile()">上传JSON</el-button>
+  <input id="uploadFile" type="file" style="display:none" @change="tirggerFile($event)" />
+  <table>
+    <!-- 表头 -->
+    <tr>
+      <td v-for="day in days">
+        {{ day.day }}
+      </td>
+    </tr>
+    <!-- 表格 -->
+    <tr v-for="onWeek in onWeeks" :id="onWeek.id">
+      <td v-for="day in days" :id="day.id">
+        <div id="timeBlock">
+          <!-- <el-input class="timeBlock" id="timeBlockTitle" v-model.lazy="titleData" @change="innerChange()" />
+          <el-input class="timeBlock" id="timeBlockData" v-model.lazy="contentData" @change="innerChange()" />
+          <el-input class="timeBlock" id="timeBlockMark" v-model.lazy="markData" @change="innerChange()" /> -->
+
+        </div>
+      </td>
+    </tr>
+  </table>
 </template>
-
-<!--下面写CSS-->
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-
-#timeBlock {
-  display: flex;
-  flex-direction: column;
-}
-
-#timeBlockTitle {
-  /* height: 100%; */
-  text-align: center;
-  overflow: hidden;
-  padding-top: 10%;
-}
-
-#timeBlockData {
-  text-align: center;
-  overflow: hidden;
-  padding-top: 10%;
-}
-
-#timeBlockMark {
-  text-align: center;
-  overflow: hidden;
-  padding-top: 10%;
-}
-</style>

@@ -7,8 +7,8 @@ const NODE_ENV = process.env.NODE_ENV
 function createWindow () {
   // 创建浏览器窗口
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 900,
+    height: 700,
     webPreferences: {
       // 关闭网站安全检查
       webSecurity: false,
