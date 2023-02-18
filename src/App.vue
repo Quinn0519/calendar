@@ -1,5 +1,7 @@
 <!--下面写JS-->
 <script>
+import { get } from 'lodash';
+
 export default {
   data() {
     return {
@@ -7,21 +9,21 @@ export default {
       contentData: '',
       markData: '',
       days: [
-        { id: 1, day: "星期一" },
-        { id: 2, day: "星期二" },
-        { id: 3, day: "星期三" },
-        { id: 4, day: "星期四" },
-        { id: 5, day: "星期五" },
-        { id: 6, day: "星期六" },
-        { id: 7, day: "星期日" },
+        { id: "day1", day: "星期一" },
+        { id: "day2", day: "星期二" },
+        { id: "day3", day: "星期三" },
+        { id: "day4", day: "星期四" },
+        { id: "day5", day: "星期五" },
+        { id: "day6", day: "星期六" },
+        { id: "day7", day: "星期日" },
       ],
       onWeeks: [
-        { id: 1, week: "第一周" },
-        { id: 2, week: "第二周" },
-        { id: 3, week: "第三周" },
-        { id: 4, week: "第四周" },
-        { id: 5, week: "第五周" },
-        { id: 6, week: "第六周" },
+        { id: "week1", week: "第一周" },
+        { id: "week2", week: "第二周" },
+        { id: "week3", week: "第三周" },
+        { id: "week4", week: "第四周" },
+        { id: "week5", week: "第五周" },
+        { id: "week6", week: "第六周" },
       ]
     };
   },
@@ -50,7 +52,18 @@ export default {
       // console.log(file);
       fetch(file.path)
         .then((response) => response.json())
-        .then((json) => console.log(json));
+        // 调取属性的两种方式，点操作符和中括号操作符。纯数字只能用中括号。
+        .then((json) => {
+          console.log(json[2][4][3]);
+          // document.getElementById("").innerHTML = json[2][4][3];
+          var m = 2;
+          for (var w = 1; w <= 6; w++) {
+            for (var d = 1; d <= 7; d++)
+              for (var e = 0; e <= 99; e++)
+                if (json[m][w][d][e] != null)
+                  document.getElementById("week" + w + "day" + d).innerHTML += json[m][w][d][e].title;
+          }
+        });
     }
   }
 }
@@ -68,14 +81,15 @@ export default {
       </td>
     </tr>
     <!-- 表格 -->
+    <!-- HTML里面，虽然没有限制，但每个元素的ID最好唯一 -->
     <tr v-for="onWeek in onWeeks" :id="onWeek.id">
-      <td v-for="day in days" :id="day.id">
-        <div id="timeBlock">
-          <!-- <el-input class="timeBlock" id="timeBlockTitle" v-model.lazy="titleData" @change="innerChange()" />
+      <td v-for="day in days" :id="onWeek.id + day.id">
+        <!-- <div id="timeBlock"> -->
+        <!-- <el-input class="timeBlock" id="timeBlockTitle" v-model.lazy="titleData" @change="innerChange()" />
           <el-input class="timeBlock" id="timeBlockData" v-model.lazy="contentData" @change="innerChange()" />
           <el-input class="timeBlock" id="timeBlockMark" v-model.lazy="markData" @change="innerChange()" /> -->
 
-        </div>
+        <!-- </div> -->
       </td>
     </tr>
   </table>
