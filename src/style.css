@@ -2,6 +2,43 @@
   margin: 0;
   padding: 0;
   border-width: 0;
+  
+}
+
+td {
+  border-style: solid;
+  border-width: 1px;
+  height: 100%;
+}
+
+#header{
+  height: 10px;
+}
+
+tr {
+  height: 8vw;
+  text-align: center;
+}
+
+#outer{
+  height: 92vh;
+}
+
+#uploadButton{
+ margin-bottom: 1%;
+ position: fixed;
+ bottom: 0;
+ left: 50%;
+}
+
+.inputnum{
+  /* height: 25%; */
+  text-align: center;
+}
+
+.el-input{
+  height: 75%;
+  text-align: center;
 }
 
 #timeBlock {
