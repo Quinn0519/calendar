@@ -12,7 +12,9 @@ function createWindow () {
     webPreferences: {
       // 关闭网站安全检查
       webSecurity: false,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      contextIsolation: false,
     }
   })
 
