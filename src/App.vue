@@ -26,7 +26,8 @@ export default {
       getMonth: '',
       getYear: '',
       dayData: '',
-      whichBlock: [{}, {}, {}, {}, {}, {}, {}]
+      whichBlock: [{}, {}, {}, {}, {}, {}, {}],
+      checked: [{}, {}, {}, {}, {}, {}, {}]
     };
 
   },
@@ -39,52 +40,45 @@ export default {
     window.render = this.render;
     window.getDayConversion = this.getDayConversion;
     window.tableEvent = this.tableEvent;
+    window.completeEvent = this.completeEvent;
+    window.displayJson = this.displayJson;
+    window.tirggerFile = this.tirggerFile;
+    window.saveJson = this.saveJson;
+    window.cleanBlock = this.cleanBlock;
+    window.cleanAndRefresh = this.cleanAndRefresh;
 
     getToday();
     refresh();
   },
   methods: {
-    // 接着写JS……
-    innerChange: function () {
-      localStorage.setItem('Title', this.titleData);
-      localStorage.setItem('Data', this.contentData);
-      localStorage.setItem('Mark', this.markData);
-    },
+    // 触发 "uploadFile" 元素的点击事件
     uploadFile: function () {
       document.getElementById("uploadFile").click();
     },
-    uploadInput: function () {
-      console.log(document.getElementById("uploadFile").value)
-    },
+    // 抓取文件
     tirggerFile: function (event) {
       // 利用console.log输出看结构就知道如何处理档案资料
-      var file = event.target.files[0];
-      fetch(file.path)
+      // var file = event.target.files[0];
+      var month1 = new Date(this.month);
+      var getMonth = month1.getMonth() + 1;
+      var getYear = month1.getFullYear();
+      var filePath = './jsonData/' + getYear + getMonth + '.json';
+      fetch(filePath)
         .then((response) => response.json())
-        // 调取属性的两种方式，点操作符和中括号操作符。纯数字只能用中括号。
-        .then((json) => {
-          var y = this.getYear;
-          var m = this.getMonth;
-          if (json[y][m] != undefined) {
-            console.log(json[y][m] + "年月已经定义")
-            for (var w = 1; w <= 6; w++) {
-              if (json[y][m][w] != undefined) {
-                console.log(json[y][m][w] + "w已经定义")
-                for (var d = 1; d <= 7; d++) {
-                  if (json[y][m][w][d] != undefined) {
-                    for (var e = 0; e <= 99; e++)
-                      if (json[y][m][w][d][e] != undefined) {
-                        console.log(json[y][m][w][d][e] + "事件已经定义")
-                        console.log(json[y][m][w][d][e].title);
-                        document.getElementById("week" + w + "day" + d).value += json[y][m][w][d][e].title;
-                      }
-                  }
-                }
-              }
-            }
-          }
-        });
+        .then((json) => this.displayJson(json));
     },
+    // 渲染Json内容
+    displayJson: function (json) {
+      console.log(json)
+      for (var i = 1; i <= 6; i++) {
+        for (var j = 1; j <= 7; j++) {
+          if (json[i][j] != undefined) {
+            this.whichBlock[i][j] = json[i][j];
+          }
+        }
+      }
+    },
+    // 闰年判断
     ifYear: function (year) {
       if (year % 4 == 0) {
         if (year % 100 == 0) {
@@ -103,6 +97,7 @@ export default {
         return 28;
       }
     },
+    // 月份与每月天数
     calculateNumMonth: function (getMonth) {
       var month1 = new Date(this.month);
       var year = month1.getFullYear();
@@ -135,11 +130,17 @@ export default {
       else
         console.error("monthDay数值错误！")
     },
+    // 获取今天
     getToday: function () {
-      var today = new Date();
-      this.month = String(today);//是一个字符串，因为month是字符串，不能赋对象。
+      // 是一个字符串，因为 this.month 是字符串，不能赋对象。
+      var toDay = new Date();
+      // 创建一个新的事件对象，用当前年当前月，其他为默认的内容来表示月的时间戳。与ElementUI的Date Picker相匹配。
+      var toMonth = new Date(toDay.getFullYear(), toDay.getMonth())
+      // console.log(toMonth)
+      this.month = toMonth;
     },
-    render: function (year, month, delta) {
+    // 渲染页面
+    render: function (month, delta) {
       for (var i = 1; i <= 6; i++) {
         for (var j = 1; j <= 7; j++) {
           var dayData = (((i - 1) * 7) + j) - delta;
@@ -156,6 +157,7 @@ export default {
         }
       }
     },
+    // getDay换算
     getDayConversion: function (getDay) {
       if (getDay == 0)
         // 因为西方国家一周的开始是周日，所以周日是0。咱们用周一为开始，要做转换。
@@ -163,8 +165,47 @@ export default {
       else
         return getDay - 1;
     },
+    // 判断完成状态 加删除线
+    completeEvent: function () {
+      for (var i = 1; i <= 6; i++) {
+        for (var j = 1; j <= 7; j++) {
+          console.log(this.checked[i][j])
+          // 如果checked，添加删除线
+          if (this.checked[i][j] == true) {
+            // 改变样式，加删除线
+            document.getElementById("week" + i + "day" + j).style.textDecoration = "line-through";
+          }
+          // 否则，去掉删除线
+          else if (this.checked[i][j] == false) {
+            document.getElementById("week" + i + "day" + j).style.textDecoration = "";
+          }
+        }
+      }
+    },
+    saveJson: function () {
+      var month1 = new Date(this.month);
+      var getMonth = month1.getMonth() + 1;
+      var getYear = month1.getFullYear();
+      console.log(__dirname)
+      console.log(JSON.stringify(this.whichBlock))
+      fs.writeFile('./jsonData/' + getYear + getMonth + '.json', JSON.stringify(this.whichBlock),
+        // 写入文件后调用的回调函数
+        function (err) {
+          if (err) throw err;
+          // 如果没有错误
+          console.log("Data is written to file successfully.")
+        });
+    },
+    cleanAndRefresh: function () {
+      for (var i = 1; i <= 6; i++) {
+        for (var j = 1; j <= 7; j++) {
+          this.whichBlock[i][j] = "";
+        }
+      }
+      refresh();
+    },
+    // 刷新函数
     refresh: function () {
-      // 管线
       var month1 = new Date(this.month);
       var getDay = month1.getDay();
       var getMonth = month1.getMonth() + 1;
@@ -172,23 +213,14 @@ export default {
       var year = month1.getFullYear();
       this.getYear = year;
 
-      render(year, getMonth, getDayConversion(getDay));
+      // 管线
+      render(getMonth, getDayConversion(getDay));
+      tirggerFile();
+      completeEvent();
+      saveJson();
     },
-    saveAsJson: function () {
-      console.log(JSON.stringify(this.whichBlock))
-      // 将数据写入文件sample.html
-      fs.writeFile('D:/OneDrive/Dev/Data/output.json', JSON.stringify(this.whichBlock),
-        // fs.writeFileSync(configPath, parseInt(nextBlock, 10).toString())
-        // 写入文件后调用的回调函数
-        function (err) {
-          if (err) throw err;
-          // 如果没有错误
-          console.log("Data is written to file successfully.")
-        });
-    }
   }
 }
-
 </script>
 
 <!--下面写HTML-->
@@ -199,7 +231,7 @@ export default {
 
   <div class="block">
     <span class="demonstration">Month</span>
-    <el-date-picker v-model="month" type="month" placeholder="Pick a month" @change="refresh()" />
+    <el-date-picker v-model="month" type="month" placeholder="Pick a month" @change="cleanAndRefresh()" />
   </div>
   <p>{{ month }}</p>
 
@@ -215,7 +247,11 @@ export default {
     <tr v-for="onWeek in onWeeks" :id="onWeek.id">
       <td v-for="day in days">
         <div class="inputnum" :id="onWeek.id + day.id + 'num'"></div>
-        <el-input :id="onWeek.id + day.id" v-model="whichBlock[onWeek.num][day.num]"></el-input>
+        <div class="inputBlock">
+          <el-input :id="onWeek.id + day.id" v-model="whichBlock[onWeek.num][day.num]" @change="refresh()"></el-input>
+          <el-checkbox :id="onWeek.id + day.id + 'checkbox'" v-model="checked[onWeek.num][day.num]" size="small"
+            @change="refresh()" style="" />
+        </div>
       </td>
     </tr>
   </table>
