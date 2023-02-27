@@ -200,9 +200,10 @@ export default {
       for (var i = 1; i <= 6; i++) {
         for (var j = 1; j <= 7; j++) {
           this.whichBlock[i][j] = "";
+          this.checked[i][j] = false;
         }
       }
-      refresh();
+      tirggerFile();
     },
     // 刷新函数
     refresh: function () {
@@ -215,9 +216,9 @@ export default {
 
       // 管线
       render(getMonth, getDayConversion(getDay));
-      tirggerFile();
       completeEvent();
       saveJson();
+      tirggerFile();
     },
   }
 }
