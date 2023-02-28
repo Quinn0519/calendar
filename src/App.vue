@@ -226,15 +226,15 @@ export default {
 
 <!--下面写HTML-->
 <template>
-  <el-button id="uploadButton" v-on:click="uploadFile()">上传JSON</el-button>
-  <el-button id="saveAsButton" v-on:click="saveAsJson()">导出JSON</el-button>
+  <!-- <el-button id="uploadButton" v-on:click="uploadFile()">上传JSON</el-button>
+  <el-button id="saveAsButton" v-on:click="saveAsJson()">导出JSON</el-button> -->
   <input id="uploadFile" type="file" style="display:none" @change="tirggerFile($event)" />
 
   <div class="block">
-    <span class="demonstration">Month</span>
-    <el-date-picker v-model="month" type="month" placeholder="Pick a month" @change="cleanAndRefresh()" />
+    <!-- <span class="demonstration">Month</span> -->
+    <!-- <el-date-picker v-model="month" type="month" placeholder="Pick a month" @change="cleanAndRefresh()" /> -->
   </div>
-  <p>{{ month }}</p>
+  <!-- <p>{{ month }}</p> -->
 
   <table id="outer">
     <!-- 表头 -->

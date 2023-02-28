@@ -5,27 +5,32 @@
   
 }
 
-/* #week1day3 {
-  text-decoration: line-through;
-} */
+#app{
+  height: 100%;
+  /* background-image: url('./assets/wallhaven-1p398w_1920x1080.png'); */
+  background-size: contain;
+  /* opacity: 0.8; */
+
+}
+
+#outer{
+  height:100vh;
+  width: 100%;
+ }
+
+ #header{
+  height: 1vh;
+}
 
 td {
   border-style: solid;
   border-width: 1px;
-  height: 100%;
-}
-
-#header{
-  height: 10px;
+  height: 5vh;
 }
 
 tr {
   height: 8vw;
   text-align: center;
-}
-
-#outer{
-  height: 92vh;
 }
 
 /* #uploadButton{
@@ -41,10 +46,14 @@ tr {
 }
 
 .el-input{
-  height: 75%;
+  /* height: 75%; */
   text-align: center;
+  padding: 2%;
 }
 
+.el-checkbox{
+  margin: 3%;
+}
 .inputBlock{
   display: flex;
   flex-direction: row-reverse;
