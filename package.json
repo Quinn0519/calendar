@@ -11,6 +11,7 @@
     "electron:build": "vite build && electron-builder"
   },
   "dependencies": {
+    "electron-acrylic-window": "^0.5.11",
     "element-plus": "^2.2.30",
     "vue": "^3.2.45"
   },
@@ -24,7 +25,9 @@
     "wait-on": "^7.0.1"
   },
   "build": {
-    "extraResources": ["./Data/**"],
+    "extraResources": [
+      "./Data/**"
+    ],
     "appId": "com.my-website.my-app",
     "productName": "calendar",
     "copyright": "Copyright © 2023 calendar",

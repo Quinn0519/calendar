@@ -1,20 +1,33 @@
 // 控制应用生命周期和创建原生浏览器窗口的模组
-const { app, BrowserWindow } = require('electron')
+const { app } = require('electron')
+const { BrowserWindow } = require("electron-acrylic-window");
 const path = require('path')
 
 const NODE_ENV = process.env.NODE_ENV
 
-function createWindow () {
+function createWindow() {
   // 创建浏览器窗口
+  op = {
+    theme: 'light',
+    effect: 'acrylic',
+    useCustomWindowRefreshMethod: true,
+    maximumRefreshRate: 60,
+    disableOnBlur: true
+  }
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 700,
+    frame: false,
+    vibrancy: op,
+
     webPreferences: {
       // 关闭网站安全检查
       webSecurity: false,
+      // perload.js 位置
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: false,
+    
     }
   })
 
@@ -23,7 +36,7 @@ function createWindow () {
   mainWindow.loadURL(
     NODE_ENV === 'development'
       ? 'http://localhost:5173'
-      :`file://${path.join(__dirname, '../dist/index.html')}`
+      : `file://${path.join(__dirname, '../dist/index.html')}`
   );
 
   // 打开开发工具

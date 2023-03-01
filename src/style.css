@@ -9,6 +9,8 @@
   height: 100%;
   /* background-image: url('./assets/wallhaven-1p398w_1920x1080.png'); */
   background-size: contain;
+  background-color: rgba(255, 100, 100, 0);
+  -webkit-app-region: drag;
   /* opacity: 0.8; */
 
 }
@@ -49,10 +51,12 @@ tr {
   /* height: 75%; */
   text-align: center;
   padding: 2%;
+  background-color: rgba(255, 100, 100, 0.1);
 }
 
 .el-checkbox{
   margin: 3%;
+  background-color: rgba(255, 100, 100, 0.1);
 }
 .inputBlock{
   display: flex;
