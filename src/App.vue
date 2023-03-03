@@ -1,7 +1,7 @@
 <!--下面写JS-->
 <script>
 const fs = require('fs');
-
+const { ipcRenderer } = require("electron");
 export default {
   data() {
     return {
@@ -205,6 +205,11 @@ export default {
       }
       tirggerFile();
     },
+
+    closeWindowSend: function () {
+      ipcRenderer.send("closeWindow");
+    },
+
     // 刷新函数
     refresh: function () {
       var month1 = new Date(this.month);
@@ -227,10 +232,11 @@ export default {
 <!--下面写HTML-->
 <template>
   <!-- <el-button id="uploadButton" v-on:click="uploadFile()">上传JSON</el-button>
-  <el-button id="saveAsButton" v-on:click="saveAsJson()">导出JSON</el-button> -->
+      <el-button id="saveAsButton" v-on:click="saveAsJson()">导出JSON</el-button> -->
   <input id="uploadFile" type="file" style="display:none" @change="tirggerFile($event)" />
 
   <div class="block">
+    <button id="closeBtn" @click="closeWindowSend()">关闭</button>
     <!-- <span class="demonstration">Month</span> -->
     <!-- <el-date-picker v-model="month" type="month" placeholder="Pick a month" @change="cleanAndRefresh()" /> -->
   </div>

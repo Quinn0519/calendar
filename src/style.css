@@ -5,12 +5,23 @@
   
 }
 
+html{
+  -webkit-app-region: drag;
+}
+
+#closeBtn{
+  -webkit-app-region: no-drag;
+}
+
+.inputBlock{
+  -webkit-app-region: no-drag;
+}
+
 #app{
   height: 100%;
   /* background-image: url('./assets/wallhaven-1p398w_1920x1080.png'); */
   background-size: contain;
-  background-color: rgba(255, 100, 100, 0);
-  -webkit-app-region: drag;
+  background-color: rgba(244, 124, 124, 0.1);
   /* opacity: 0.8; */
 
 }
@@ -51,16 +62,25 @@ tr {
   /* height: 75%; */
   text-align: center;
   padding: 2%;
-  background-color: rgba(255, 100, 100, 0.1);
+  
 }
 
 .el-checkbox{
   margin: 3%;
-  background-color: rgba(255, 100, 100, 0.1);
+  
 }
+
+.el-input__wrapper{
+  background-color:rgba(247, 242, 231, 0.1); 
+}
+
 .inputBlock{
   display: flex;
   flex-direction: row-reverse;
+}
+
+.el-checkbox__inner{
+  background-color: rgba(216, 211, 205, 0.1);
 }
 
 #timeBlock {

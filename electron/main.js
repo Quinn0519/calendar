@@ -1,8 +1,7 @@
 // 控制应用生命周期和创建原生浏览器窗口的模组
-const { app } = require('electron')
+const { app, ipcMain } = require('electron')
 const { BrowserWindow } = require("electron-acrylic-window");
-const path = require('path')
-
+const path = require('path');
 const NODE_ENV = process.env.NODE_ENV
 
 function createWindow() {
@@ -27,8 +26,12 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: false,
-    
+
     }
+  })
+
+  ipcMain.on("closeWindow", (event) => {
+    mainWindow.close();
   })
 
   // 加载 index.html
